@@ -50,12 +50,12 @@ jobs:
       #     echo "Found UF2 file: $UF2_FILE"
       #     mv "$UF2_FILE" .pio/build/pico2-nopsram/pico2-gb-nopsram.uf2
 
-      - name: Build PlatformIO Project (ENABLE_RP2040_PSRAM=1)
+      - name: Build PlatformIO Project (ENABLE_RP2040_PSRAM=0)
         run: |
-          pio run --environment pico2-psram
-          UF2_FILE=$(find .pio/build/pico2-psram -name "*.uf2" | head -n 1)
+          pio run --environment pico
+          UF2_FILE=$(find .pio/build/pico -name "*.uf2" | head -n 1)
           echo "Found UF2 file: $UF2_FILE"
-          mv "$UF2_FILE" .pio/build/pico2-psram/pico2-gb-psram.uf2
+          mv "$UF2_FILE" .pio/build/pico/pico-gb.uf2
 
 
       - name: Create GitHub Release
@@ -91,13 +91,13 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload UF2 to Release (ENABLE_RP2040_PSRAM=1)
+      - name: Upload UF2 to Release (ENABLE_RP2040_PSRAM=0)
         if: steps.create_release.outputs.upload_url
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: .pio/build/pico2-psram/pico2-gb-psram.uf2
-          asset_name: pico2-gb-psram.uf2
+          asset_path: .pio/build/pico/pico-gb.uf2
+          asset_name: pico-gb.uf2
           asset_content_type: application/octet-stream
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
